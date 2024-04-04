@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text-to-Speech Web App</title>
+</head>
+<body>
+  <input type="file" id="fileInput" accept=".txt">
+  <select id="languageSelect">
+    <option value="en-US">English (United States)</option>
+    <option value="zh-TW">Chinese (Taiwan)</option>
+  </select>
+  <button id="playButton" disabled>Play</button>
+  <div id="textArea"></div>
+
+  <script>
+    // Function to handle file selection
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const text = e.target.result;
+          document.getElementById('textArea').innerText = text;
+          document.getElementById('playButton').disabled = false;
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // Function to start TTS
+    function startTextToSpeech() {
+      const text = document.getElementById('textArea').innerText;
+      const lang = document.getElementById('languageSelect').value;
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = lang;
+      speechSynthesis.speak(speech);
+    }
+
+    // Event listener for file input
+    document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+    // Event listener for play button
+    document.getElementById('playButton').addEventListener('click', startTextToSpeech);
+  </script>
+</body>
+</html>
